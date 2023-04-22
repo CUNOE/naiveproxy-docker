@@ -2,20 +2,19 @@ name: Build NaiveProxy Docker Images
 
 on:
 
+  workflow_dispatch:
   push:
     branches: [ master ]
     paths-ignore:
       - 'README.md'
       - 'LICENSE'
       - '.github/**'
-      - 'BuildEnv/**'
   pull_request:
     branches: [ master ]
     paths-ignore:
       - 'README.md'
       - 'LICENSE'
       - '.github/**'
-      - 'BuildEnv/**'
 
 jobs:
   build-server:
