@@ -13,6 +13,7 @@ EXPOSE 80
 EXPOSE 443
 
 COPY --from=build /go/caddy /app/caddy
+COPY Caddyfile /app/Caddyfile
 
 RUN apt-get update && \
     apt-get install -y ca-certificates
