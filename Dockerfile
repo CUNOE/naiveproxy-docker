@@ -1,3 +1,20 @@
+FROM ubuntu AS client-prod
+
+ENV PROXY_SERVER=https://user:pass@example.com \
+    LISTEN_ADDR=socks://0.0.0.0:1080
+
+WORKDIR /app
+
+RUN apt-get update && \
+    apt-get install -y ca-certificates wget
+
+RUN wget -O naive.tar.xz "$(wget https://api.github.com/repos/klzgrad/naiveproxy/releases/latest -O - | grep "linux-x64" | grep "download" | awk '{print($2)}' | sed 's/"//g')" && \
+    tar -xf naive.tar.xz && \
+    rm naive.tar.xz && \
+    mv naive*/naive naive
+
+CMD ["./naive", "--proxy-server", "$PROXY_SERVER", "--listen", "$LISTEN_ADDR"]
+
 FROM golang:1.19 AS build
 
 WORKDIR /go
@@ -19,20 +36,3 @@ RUN apt-get update && \
     apt-get install -y ca-certificates
 
 CMD ["./caddy", "run", "--config", "/app/Caddyfile"]
-
-FROM ubuntu AS client-prod
-
-ENV PROXY_SERVER=https://user:pass@example.com \
-    LISTEN_ADDR=socks://0.0.0.0:1080
-
-WORKDIR /app
-
-RUN apt-get update && \
-    apt-get install -y ca-certificates wget
-
-RUN wget -O naive.tar.gz "$(wget https://api.github.com/repos/klzgrad/naiveproxy/releases/latest -O - | grep "linux-x64" | grep "download" | awk '{print($2)}' | sed 's/"//g')" && \
-    tar -xvf naive.tar.gz && \
-    rm naive.tar.gz && \
-    mv naive*/naive naive
-
-CMD ["./naive", "--proxy-server", "$PROXY_SERVER", "--listen", "$LISTEN_ADDR"]
