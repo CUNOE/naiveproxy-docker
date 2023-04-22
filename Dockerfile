@@ -1,6 +1,7 @@
 FROM ubuntu AS client-prod
 
-ENV PROXY_SERVER=https://user:pass@example.com \
+ENV MODE=client \
+    PROXY_SERVER=https://user:pass@example.com \
     LISTEN_ADDR=socks://0.0.0.0:1080
 
 WORKDIR /app
@@ -13,7 +14,10 @@ RUN wget "$(wget https://api.github.com/repos/klzgrad/naiveproxy/releases/latest
     rm *.tar.xz && \
     mv naive*/naive naive
 
-CMD ["./naive", "--listen=${LISTEN_ADDR}", "--proxy=${PROXY_SERVER}", "--log"]
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+ENTRYPOINT ["/app/entrypoint.sh"]
 
 FROM golang:1.19 AS build
 
@@ -29,10 +33,15 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
+ENV MODE=server
+
 COPY --from=build /go/caddy /app/caddy
 COPY Caddyfile /app/Caddyfile
 
 RUN apt-get update && \
     apt-get install -y ca-certificates
 
-CMD ["./caddy", "run", "--config", "/app/Caddyfile"]
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+ENTRYPOINT ["/app/entrypoint.sh"]
