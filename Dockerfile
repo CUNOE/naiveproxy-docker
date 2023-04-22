@@ -13,7 +13,7 @@ RUN wget "$(wget https://api.github.com/repos/klzgrad/naiveproxy/releases/latest
     rm *.tar.xz && \
     mv naive*/naive naive
 
-CMD ["./naive", "--listen=$LISTEN_ADDR", "--proxy=$PROXY_SERVER", "--log"]
+CMD ["./naive", "--listen=${LISTEN_ADDR}", "--proxy=${PROXY_SERVER}", "--log"]
 
 FROM golang:1.19 AS build
 
