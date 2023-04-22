@@ -3,6 +3,8 @@ name: Build NaiveProxy Docker Images
 on:
 
   workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 1'
   push:
     branches: [ master ]
     paths-ignore:
