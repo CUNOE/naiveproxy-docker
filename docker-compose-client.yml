@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+
+  naiveproxy:
+    image: cunoe/naiveproxy:client
+    container_name: naiveproxy-client
+    restart: always
+    ports:
+      - "1080:1080"
+    environment:
+      - PROXY_SERVER=https://user:pass@example.com
+    networks:
+      - naiveproxy
+
+# 创建网络
+networks:
+  naiveproxy:
+    driver: bridge

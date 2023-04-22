@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+
+  naiveproxy-server:
+    image: cunoe/naiveproxy:server
+    container_name: naiveproxy-server
+    restart: always
+    volumes:
+      - ./Caddyfile:/app/Caddyfile
+    ports:
+      - "443:443"
+    networks:
+      - naiveproxy
+
+networks:
+  naiveproxy:
+    driver: bridge
