@@ -9,8 +9,8 @@ RUN apt-get update && \
     apt-get install -y ca-certificates wget
 
 RUN wget "$(wget https://api.github.com/repos/klzgrad/naiveproxy/releases/latest -O - | grep "linux-x64" | grep "download" | awk '{print($2)}' | sed 's/"//g')" && \
-    tar -xzvf *.tar.xz && \
-    rm naive.tar.xz && \
+    tar -xf *.tar.xz && \
+    rm *.tar.xz && \
     mv naive*/naive naive
 
 CMD ["./naive", "--proxy-server", "$PROXY_SERVER", "--listen", "$LISTEN_ADDR"]
