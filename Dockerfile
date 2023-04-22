@@ -6,7 +6,7 @@ ENV PROXY_SERVER=https://user:pass@example.com \
 WORKDIR /app
 
 RUN apt-get update && \
-    apt-get install -y ca-certificates wget
+    apt-get install -y ca-certificates wget xz-utils
 
 RUN wget "$(wget https://api.github.com/repos/klzgrad/naiveproxy/releases/latest -O - | grep "linux-x64" | grep "download" | awk '{print($2)}' | sed 's/"//g')" && \
     tar -xf *.tar.xz && \
