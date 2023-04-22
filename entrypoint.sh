@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$MODE" = "server"]; then
+if [ "$MODE" = "server" ]; then
     echo "Starting server"
     exec /app/caddy run --environ --config /app/Caddyfile
 elif [ "$MODE" = "client" ]; then
